@@ -151,32 +151,3 @@ void delete_hashmap(HashMap *hm, DestroyDataCallback destroy_data) {
 	free(hm->buckets);
 	free(hm);
 }
-
-
-//void *default_collision_resolver(void *old, void *new) {
-//	return new;
-//}
-
-//void iteration_callback(char *key, void *value) {
-//	printf("Entry: K[%s] Value[%s] \n", key, value);
-//}
-
-//int main(int argc, char **argv) {	
-//	HashMap *hm = create_hashmap(6);	
-//	printf("Data stored was %s\n", get_data(hm, "ad"));
-//	ResolveCollisionCallback def_col = &default_collision_resolver;
-//	insert_data(hm, "ad", "some string", def_col);
-//	printf("Data stored was %s\n", get_data(hm, "ad"));
-//	insert_data(hm, "ad", "some string", def_col);
-//	insert_data(hm, "a", "some string", def_col);
-//	insert_data(hm, "bc", "some string", def_col);
-//	insert_data(hm, "bc", "some string", def_col);
-//	insert_data(hm, "f", "Some random", def_col);
-
-//	void (*it_callback)(char*,void*) = iteration_callback;
-//	iterate(hm, it_callback);
-
-//	remove_data(hm, "ad", NULL);
-//	iterate(hm, it_callback);
-//	delete_hashmap(hm, NULL);
-//}
