@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
+// Declares the strdup function in string.h, because c99 does not normally support it.
+char* strdup(const char * s);
+
 typedef unsigned int Hash; 
 
 typedef Hash (*HashFunction)(char*); 
@@ -43,7 +46,7 @@ HashMap* create_hashmap(size_t key_space) {
 Node* create_node(char *key, void *val) {
 	Node *new_node = malloc(sizeof(Node));
 	new_node->next = NULL;
-	new_node->key = key;
+	new_node->key = strdup(key);
 	new_node->value = val;
 	return new_node;
 }
@@ -121,6 +124,7 @@ void remove_data(HashMap *hm, char *key, DestroyDataCallback destroy_data) {
 			if (destroy_data != NULL) {
 				destroy_data(pNode->value);
 			}
+			free(pNode->key);
 			free(pNode);
 			return;
 		}
@@ -139,6 +143,7 @@ void delete_hashmap(HashMap *hm, DestroyDataCallback destroy_data) {
 			if (destroy_data != NULL) {
 				destroy_data(pNode->value);
 			}
+			free(pNode->key);
 			free(pNode);
 			pNode = pNext;
 		}
