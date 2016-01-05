@@ -10,7 +10,7 @@ char* strdup(const char * s);
 
 typedef unsigned int Hash; 
 
-typedef Hash (*HashFunction)(char*); 
+typedef Hash (*HashFunction)(const char*); 
 
 typedef struct Node {
 	struct Node *next;
@@ -24,9 +24,9 @@ typedef struct _HashMap {
 	HashFunction hash;
 	} HashMap;
 
-Hash default_hash(char *key) {
+Hash default_hash(const char *key) {
 	Hash value = 0;
-	for(char *i = key; *i; i++) {
+	for(const char *i = key; *i; i++) {
 		value = value + *i;
 	}
 	return value;
@@ -43,7 +43,7 @@ HashMap* create_hashmap(size_t key_space) {
 }
 
 // Creates a new Node.
-Node* create_node(char *key, void *val) {
+Node* create_node(const char *key, void *val) {
 	Node *new_node = malloc(sizeof(Node));
 	new_node->next = NULL;
 	new_node->key = strdup(key);
@@ -52,7 +52,7 @@ Node* create_node(char *key, void *val) {
 }
 
 // Insets an element into the HashMap, using the provided CollisionCallback function.
-void insert_data(HashMap *hm, char *key, void *data, ResolveCollisionCallback resolve_collision) {
+void insert_data(HashMap *hm, const char *key, void *data, ResolveCollisionCallback resolve_collision) {
 	assert(hm);
 	assert(key);
 	assert(resolve_collision);
@@ -77,7 +77,7 @@ void insert_data(HashMap *hm, char *key, void *data, ResolveCollisionCallback re
 	*(hm->buckets+hash) = create_node(key, data);
 }
 
-void *get_data(HashMap *hm, char *key) {
+void *get_data(HashMap *hm, const char *key) {
 	assert(hm);
 	assert(key);	
 	Hash hash = hm->hash(key) % hm->key_space;
@@ -94,7 +94,7 @@ void *get_data(HashMap *hm, char *key) {
 	return NULL;
 }
 
-void iterate(HashMap *hm, void (*callback)(char*,void*)) {
+void iterate(HashMap *hm, void (*callback)(const char*,void*)) {
 	assert(hm);
 	assert(callback);
 	for(Node **pBucket = hm->buckets; pBucket < hm->buckets+hm->key_space; pBucket++) {
@@ -106,7 +106,7 @@ void iterate(HashMap *hm, void (*callback)(char*,void*)) {
 	} 
 }
 
-void remove_data(HashMap *hm, char *key, DestroyDataCallback destroy_data) {
+void remove_data(HashMap *hm, const char *key, DestroyDataCallback destroy_data) {
 	assert(hm);
 	assert(key);
 	Hash hash = hm->hash(key) % hm->key_space;
